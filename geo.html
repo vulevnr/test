@@ -40,6 +40,7 @@
     <div id="divMap"></div>
 
     <h1>Map Image</h1>
+    <button onClick="renderImager()">Render Image</button>
     <div id="printMap"></div>
 
     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
@@ -151,7 +152,23 @@
                     });
             }
 
+            function renderImager() {
+                domtoimage.toPng(document.getElementById('divMap'))
+                    .then(function (dataUrl) {
+                        var img = new Image();
+                        img.src = dataUrl;
+
+                        var printMap = document.getElementById('printMap');
+                        printMap.innerHTML = '';
+                        printMap.appendChild(img);
+                    })
+                    .catch(function (error) {
+                        console.error('oops, something went wrong!', error);
+                    });
+            }
+
             window.showInfos = showInfos;
+            window.renderImager = renderImager;
         })();
     </script>
 </body>
