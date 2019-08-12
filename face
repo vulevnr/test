@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Page Title</title>
+</head>
+
+<body>
+
+    <video id="video" width="640" height="480" autoplay></video>
+
+    <script>
+        // Grab elements, create settings, etc.
+        var video = document.getElementById('video');
+
+        // Get access to the camera!
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            // Not adding `{ audio: true }` since we only want video now
+            navigator.mediaDevices.getUserMedia({
+                video: true
+            }).then(function (stream) {
+                //video.src = window.URL.createObjectURL(stream);
+                video.srcObject = stream;
+                video.play();
+
+                var wsFace = new WebSocket('ws://192.168.1.44:1237/Face')
+
+                video.onprogress = function (e) {
+                    var canvas = document.createElement('canvas');
+                    canvas.height = video.videoHeight;
+                    canvas.width = video.videoWidth;
+                    var ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    // var img = new Image();
+                    // img.src = canvas.toDataURL();
+                    //callback.call(me, img, this.currentTime, e);
+
+                    canvas.toBlob(function (imageBlob) {
+                        wsFace.send(imageBlob);
+                    });
+                };
+            });
+        }
+
+        /* Legacy code below: getUserMedia */
+        else if (navigator.getUserMedia) { // Standard
+            navigator.getUserMedia({
+                video: true
+            }, function (stream) {
+                video.src = stream;
+                video.play();
+
+                var wsFace = new WebSocket('ws://192.168.1.44:1237/Face')
+
+                video.onprogress = function (e) {
+                    var canvas = document.createElement('canvas');
+                    canvas.height = video.videoHeight;
+                    canvas.width = video.videoWidth;
+                    var ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    // var img = new Image();
+                    // img.src = canvas.toDataURL();
+                    //callback.call(me, img, this.currentTime, e);
+
+                    canvas.toBlob(function (imageBlob) {
+                        wsFace.send(imageBlob);
+                    });
+                };
+            }, errBack);
+        } else if (navigator.webkitGetUserMedia) { // WebKit-prefixed
+            navigator.webkitGetUserMedia({
+                video: true
+            }, function (stream) {
+                video.src = window.webkitURL.createObjectURL(stream);
+                video.play();
+
+                var wsFace = new WebSocket('ws://192.168.1.44:1237/Face')
+
+                video.onprogress = function (e) {
+                    var canvas = document.createElement('canvas');
+                    canvas.height = video.videoHeight;
+                    canvas.width = video.videoWidth;
+                    var ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    // var img = new Image();
+                    // img.src = canvas.toDataURL();
+                    //callback.call(me, img, this.currentTime, e);
+
+                    canvas.toBlob(function (imageBlob) {
+                        wsFace.send(imageBlob);
+                    });
+                };
+            }, errBack);
+        } else if (navigator.mozGetUserMedia) { // Mozilla-prefixed
+            navigator.mozGetUserMedia({
+                video: true
+            }, function (stream) {
+                video.srcObject = stream;
+                video.play();
+
+                var wsFace = new WebSocket('ws://192.168.1.44:1237/Face')
+
+                video.onprogress = function (e) {
+                    var canvas = document.createElement('canvas');
+                    canvas.height = video.videoHeight;
+                    canvas.width = video.videoWidth;
+                    var ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    // var img = new Image();
+                    // img.src = canvas.toDataURL();
+                    //callback.call(me, img, this.currentTime, e);
+
+                    canvas.toBlob(function (imageBlob) {
+                        wsFace.send(imageBlob);
+                    });
+                };
+            }, errBack);
+        }
+    </script>
+</body>
+
+</html>
