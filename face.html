@@ -23,7 +23,7 @@
                 video.srcObject = stream;
                 video.play();
 
-                var wsFace = new WebSocket('ws://192.168.1.44:1237/Face')
+                var wsFace = new WebSocket('ws://103.42.56.200:1237/Face')
 
                 video.onprogress = function (e) {
                     var canvas = document.createElement('canvas');
